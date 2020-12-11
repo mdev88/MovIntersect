@@ -13,15 +13,15 @@ class MyOmdb extends Omdb {
   @override
   late Movie movie;
 
-  String _api;
-  String _movieName;
-  int? _year;
+  final String _api;
+  final String _movieName;
+  final int? _year;
 
   @override
   Future<void> getMovie() async {
     String myurl = '$base_url?t=$_movieName&apikey=$_api&type=movie';
     if (_year != null) myurl += '&y=$_year';
-    print(myurl);
+    // print(myurl);
     var res = await http.get(myurl);
     var decodedjson = jsonDecode(res.body);
     movie = Movie.fromJson(decodedjson);
