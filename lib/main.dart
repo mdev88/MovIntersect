@@ -10,7 +10,7 @@ void main() async {
   try {
     // Get movie 1
     String confirm = 'n';
-    while (confirm != 'y' || confirm == '') {
+    while (confirm != 'y' || confirm != '') {
       if (confirm == 'q') exit(1);
       movie1 = await queryMovie();
 
@@ -20,7 +20,7 @@ void main() async {
 
     // Get movie 2
     confirm = 'n';
-    while (confirm != 'y' || confirm == '') {
+    while (confirm != 'y' || confirm != '') {
       if (confirm == 'q') exit(1);
       movie2 = await queryMovie();
 
@@ -35,18 +35,8 @@ void main() async {
     }
 
     // Director
-    if (movie1.movie.director.contains(movie2.movie.director)) {
-      print('Both movies were directed by ${movie2.movie.director}');
-    } else if (movie2.movie.director.contains(movie1.movie.director)) {
-      print('Both movies were directed by ${movie1.movie.director}');
-    }
 
     // Writer
-    if (movie1.movie.writer.contains(movie2.movie.writer)) {
-      print('Both movies were written by ${movie2.movie.writer}');
-    } else if (movie2.movie.writer.contains(movie1.movie.writer)) {
-      print('Both movies were written by ${movie1.movie.writer}');
-    }
 
     // print('Runtime: ${movie1.movie.runtime}');
     // print('Poster URL: ${movie1.movie.poster}'); //URL of poster
@@ -70,12 +60,12 @@ void main() async {
 
 Future<MyOmdb> queryMovie() async {
   stdout.write('Enter movie title: ');
-  String movie1 = stdin.readLineSync()!;
+  String movie = stdin.readLineSync()!;
 
   stdout.write('(Optional) Enter year of release [ENTER to skip]): ');
-  int? year1 = int.tryParse(stdin.readLineSync()!);
+  int? year = int.tryParse(stdin.readLineSync()!);
 
-  MyOmdb client = MyOmdb(Keys.OMDB_KEY, movie1, year1);
+  MyOmdb client = MyOmdb(Keys.OMDB_KEY, movie, year);
   await client.getMovie();
 
   print('');
