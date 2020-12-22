@@ -48,40 +48,59 @@ void main() async {
     }
 
     // Director/s
-    movie1.directorsList
-        .removeWhere((element) => !movie2.directorsList.contains(element));
-    if (movie1.directorsList.isNotEmpty) {
-      print(
-          '> Both movies were directed by ${movie1.directorsList.join(', ')}');
+    List<String> directorsMatch = [];
+    for (String director in movie1.directorsList) {
+      if (movie2.directorsList.contains(director)) {
+        directorsMatch.add(director);
+      }
+    }
+    if (directorsMatch.isNotEmpty) {
+      print('Both were directed by ${directorsMatch.join(', ')}');
     }
 
     // Writer/s
-    movie1.writersList
-        .removeWhere((element) => !movie2.writersList.contains(element));
-    if (movie1.writersList.isNotEmpty) {
-      print('> Both movies were written by ${movie1.writersList.join(', ')}');
+    List<String> writersMatch = [];
+    for (String writer in movie1.writersList) {
+      if (movie2.writersList.contains(writer)) {
+        writersMatch.add(writer);
+      }
+    }
+    if (writersMatch.isNotEmpty) {
+      print('Both were written by ${writersMatch.join(', ')}');
     }
 
     // Actor/s
-    movie1.actorsList
-        .removeWhere((element) => !movie2.actorsList.contains(element));
-    if (movie1.actorsList.isNotEmpty) {
+    List<String> actorsMatch = [];
+    for (String actor in movie1.actorsList) {
+      if (movie2.actorsList.contains(actor)) {
+        actorsMatch.add(actor);
+      }
+    }
+    if (actorsMatch.isNotEmpty) {
       print(
-          '> Actor/s or Acress/es in common: ${movie1.actorsList.join(', ')}');
+          'Both movies have actor/s or actress/es in common: ${actorsMatch.join(', ')}');
     }
 
     // Country
-    movie1.countryList
-        .removeWhere((element) => !movie2.countryList.contains(element));
-    if (movie1.countryList.isNotEmpty) {
-      print('> Both movies are from: ${movie1.countryList.join(', ')}');
+    List<String> countryMatch = [];
+    for (String country in movie1.countriesList) {
+      if (movie2.countriesList.contains(country)) {
+        countryMatch.add(country);
+      }
+    }
+    if (countryMatch.isNotEmpty) {
+      print('Both movies are from ${countryMatch.join(', ')}');
     }
 
     // Language
-    movie1.langList
-        .removeWhere((element) => !movie2.langList.contains(element));
-    if (movie1.langList.isNotEmpty) {
-      print('> Language/s in common: ${movie1.langList.join(', ')}');
+    List<String> langMatch = [];
+    for (String lang in movie1.langList) {
+      if (movie2.langList.contains(lang)) {
+        langMatch.add(lang);
+      }
+    }
+    if (langMatch.isNotEmpty) {
+      print('Both movies have languages in common: ${langMatch.join(', ')}');
     }
 
     // Runtime
@@ -167,7 +186,7 @@ extension on Movie {
 
 /// Returns the country/ies of origin in the form of a List
 extension on Movie {
-  List<String> get countryList {
+  List<String> get countriesList {
     return stringFieldToList(country);
   }
 }
