@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:omdb_dart/model/movie.dart';
 
-import 'entities/my_omdb.dart';
+import '../lib/entities/my_omdb.dart';
 
 void main() async {
   late Movie movie1;
