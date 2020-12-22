@@ -129,7 +129,13 @@ Future<Movie> queryMovie() async {
   }
 
   stdout.write('(Optional) Enter year of release [ENTER to skip]): ');
-  int? year = int.tryParse(stdin.readLineSync()!); // TODO validate input
+  int? year = int.tryParse(stdin.readLineSync()!);
+  if (year != null) {
+    if (year < 1870 || year > DateTime.now().year) {
+      print('Not a valid year');
+      year = null;
+    }
+  }
 
   MyOmdb client = MyOmdb(movie, year);
   await client.getMovie();
