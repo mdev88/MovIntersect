@@ -1,6 +1,8 @@
 # MovIntersect
 Simple command-line tool that shows what two movies have in common.
 
+![](assets/movintersect-demo.gif)
+
 ## DISCLAIMER
 There may be some limitations in the amount or quality of the information obtained from the API.
 It uses OMDB API. For mor information visit: http://www.omdbapi.com/
