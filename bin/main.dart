@@ -1,12 +1,14 @@
 import 'dart:io';
 
 import 'package:omdb_dart/model/movie.dart';
-
-import '../lib/entities/my_omdb.dart';
+import 'package:test/entities/my_omdb.dart';
+import 'package:tint/tint.dart';
 
 void main() async {
   late Movie movie1;
   late Movie movie2;
+
+  print('\n MOVINTERSECT '.black().onWhite());
 
   try {
     // Get movie 1
@@ -19,7 +21,7 @@ void main() async {
         stdout.write('Is this the movie you were looking for? [Y/n/q]: ');
         confirm = stdin.readLineSync()?.toLowerCase();
       } catch (e) {
-        print('\nMovie not found, please try again');
+        print('\nMovie not found, please try again'.red());
       }
     }
 
@@ -33,17 +35,17 @@ void main() async {
         stdout.write('Is this the movie you were looking for? [Y/n/q]: ');
         confirm = stdin.readLineSync()?.toLowerCase();
       } catch (e) {
-        print('\nMovie not found, please try again');
+        print('\nMovie not found, please try again'.red());
       }
     }
 
-    print('\n####################');
-    print('MOVINTERSECT RESULTS');
-    print('####################');
+    print('\n');
+    print(' MOVINTERSECT RESULTS '.black().onWhite());
+    print('\n');
 
     // Same movie?
     if (movie1.imdbID == movie2.imdbID) {
-      print('They are the same movie!');
+      print('> They are the same movie!'.blue());
       exit(0);
     }
 
@@ -55,7 +57,7 @@ void main() async {
       }
     }
     if (directorsMatch.isNotEmpty) {
-      print('Both were directed by ${directorsMatch.join(', ')}');
+      print('> Both were directed by ${directorsMatch.join(', ')}'.green());
     }
 
     // Writer/s
@@ -66,7 +68,7 @@ void main() async {
       }
     }
     if (writersMatch.isNotEmpty) {
-      print('Both were written by ${writersMatch.join(', ')}');
+      print('> Both were written by ${writersMatch.join(', ')}'.green());
     }
 
     // Actor/s
@@ -78,7 +80,8 @@ void main() async {
     }
     if (actorsMatch.isNotEmpty) {
       print(
-          'Both movies have actor/s or actress/es in common: ${actorsMatch.join(', ')}');
+          '> Both movies have actor/s or actress/es in common: ${actorsMatch.join(', ')}'
+              .green());
     }
 
     // Country
@@ -89,7 +92,7 @@ void main() async {
       }
     }
     if (countryMatch.isNotEmpty) {
-      print('Both movies are from ${countryMatch.join(', ')}');
+      print('> Both movies are from ${countryMatch.join(', ')}'.green());
     }
 
     // Language
@@ -100,12 +103,14 @@ void main() async {
       }
     }
     if (langMatch.isNotEmpty) {
-      print('Both movies have languages in common: ${langMatch.join(', ')}');
+      print('> Both movies have languages in common: ${langMatch.join(', ')}'
+          .green());
     }
 
     // Runtime
     if (movie1.runtime == movie2.runtime) {
-      print('> Both movies have the exact same runtime!: ${movie1.runtime}');
+      print('> Both movies have the exact same runtime!: ${movie1.runtime}'
+          .green());
     }
 
     print('\n');
@@ -131,10 +136,10 @@ Future<Movie> queryMovie() async {
 
   if (client.movie.title == null) throw Exception('Movie not found');
 
-  print('\n*****');
-  print('Title: ${client.movie.title} (${client.movie.year})');
-  print('Plot:${client.movie.plot} ');
-  print('*****\n');
+  print('\n');
+  print('Title: ${client.movie.title} (${client.movie.year})'.blue());
+  print('Plot:${client.movie.plot} '.blue());
+  print('\n');
 
   return client.movie;
 }
