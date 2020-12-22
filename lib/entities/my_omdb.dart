@@ -5,20 +5,20 @@ import 'package:http/http.dart' as http;
 import 'package:omdb_dart/model/movie.dart';
 import 'package:omdb_dart/omdb_dart.dart';
 
+import '../api_key.dart';
+
 class MyOmdb extends Omdb {
-  MyOmdb(this._api, this._movieName, [this._year]) : super(_api, _movieName);
+  MyOmdb(this._movieName, [this._year]) : super(Keys.OMDB_KEY, _movieName);
 
   @override
   final String base_url = 'http://www.omdbapi.com/';
 
-  late Movie movie;
-
-  final String _api;
   final String _movieName;
   final int? _year;
 
+  @override
   Future<void> getMovie() async {
-    String myurl = '$base_url?t=$_movieName&apikey=$_api&type=movie';
+    String myurl = '$base_url?t=$_movieName&apikey=${Keys.OMDB_KEY}&type=movie';
     if (_year != null) myurl += '&y=$_year';
     var res = await http.get(myurl);
     var decodedjson = jsonDecode(res.body);

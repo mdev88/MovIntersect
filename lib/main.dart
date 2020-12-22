@@ -3,11 +3,10 @@ import 'dart:io';
 import 'package:omdb_dart/model/movie.dart';
 
 import 'entities/my_omdb.dart';
-import 'api_key.dart';
 
 void main() async {
-  late MyOmdb movie1;
-  late MyOmdb movie2;
+  late Movie movie1;
+  late Movie movie2;
 
   try {
     // Get movie 1
@@ -15,10 +14,13 @@ void main() async {
     while (confirm != 'y') {
       if (confirm == 'q') exit(1);
       if (confirm == '') break;
-      movie1 = await queryMovie();
-
-      stdout.write('Is this the movie you were looking for? [Y/n/q]: ');
-      confirm = stdin.readLineSync()?.toLowerCase();
+      try {
+        movie1 = await queryMovie();
+        stdout.write('Is this the movie you were looking for? [Y/n/q]: ');
+        confirm = stdin.readLineSync()?.toLowerCase();
+      } catch (e) {
+        print('\nMovie not found, please try again');
+      }
     }
 
     // Get movie 2
@@ -26,137 +28,153 @@ void main() async {
     while (confirm != 'y') {
       if (confirm == 'q') exit(1);
       if (confirm == '') break;
-      movie2 = await queryMovie();
-
-      stdout.write('Is this the movie you were looking for? [Y/n/q]: ');
-      confirm = stdin.readLineSync()?.toLowerCase();
+      try {
+        movie2 = await queryMovie();
+        stdout.write('Is this the movie you were looking for? [Y/n/q]: ');
+        confirm = stdin.readLineSync()?.toLowerCase();
+      } catch (e) {
+        print('\nMovie not found, please try again');
+      }
     }
 
+    print('\n####################');
+    print('MOVINTERSECT RESULTS');
+    print('####################');
+
     // Same movie?
-    if (movie1.movie.imdbID == movie2.movie.imdbID) {
+    if (movie1.imdbID == movie2.imdbID) {
       print('They are the same movie!');
       exit(0);
     }
 
     // Director/s
-    List<String> directorsMatch = [];
-    for (String director in movie1.movie.directorsList) {
-      if (movie2.movie.directorsList.contains(director)) {
-        directorsMatch.add(director);
-      }
-    }
-    if (directorsMatch.isNotEmpty) {
-      print('Both were directed by ${directorsMatch.join(', ')}');
+    movie1.directorsList
+        .removeWhere((element) => !movie2.directorsList.contains(element));
+    if (movie1.directorsList.isNotEmpty) {
+      print(
+          '> Both movies were directed by ${movie1.directorsList.join(', ')}');
     }
 
     // Writer/s
-    List<String> writersMatch = [];
-    for (String writer in movie1.movie.writersList) {
-      if (movie2.movie.writersList.contains(writer)) {
-        writersMatch.add(writer);
-      }
-    }
-    if (writersMatch.isNotEmpty) {
-      print('Both were written by ${writersMatch.join(', ')}');
+    movie1.writersList
+        .removeWhere((element) => !movie2.writersList.contains(element));
+    if (movie1.writersList.isNotEmpty) {
+      print('> Both movies were written by ${movie1.writersList.join(', ')}');
     }
 
     // Actor/s
-    List<String> actorsMatch = [];
-    for (String actor in movie1.movie.actorsList) {
-      if (movie2.movie.actorsList.contains(actor)) {
-        actorsMatch.add(actor);
-      }
-    }
-    if (actorsMatch.isNotEmpty) {
-      print('Shared actor/s/actress/es : ${actorsMatch.join(', ')}');
+    movie1.actorsList
+        .removeWhere((element) => !movie2.actorsList.contains(element));
+    if (movie1.actorsList.isNotEmpty) {
+      print(
+          '> Actor/s or Acress/es in common: ${movie1.actorsList.join(', ')}');
     }
 
-    // print('Director:${movie1.movie.director} ');
-    // print('Writer:${movie1.movie.writer} ');
-    // print('Runtime: ${movie1.movie.runtime}');
-    // print('Poster URL: ${movie1.movie.poster}'); //URL of poster
-    // print('Actors:${movie1.movie.actors} ');
-    // print('Language:${movie1.movie.language} ');
-    // print('Country:${movie1.movie.country} ');
-    // print('Awards:${movie1.movie.awards} ');
-    // print('Meta Score:${movie1.movie.metascore} ');
-    // print('IMDB Rating:${movie1.movie.imdbRating} ');
-    // print('IMDB Votes:${movie1.movie.imdbVotes} ');
-    // print('IMDB ID:${movie1.movie.imdbID} ');
-    // print('Website:${movie1.movie.website} ');
-    // print('Production:${movie1.movie.production} ');
-    // print('Box Office:${movie1.movie.boxOffice} ');
+    // Country
+    movie1.countryList
+        .removeWhere((element) => !movie2.countryList.contains(element));
+    if (movie1.countryList.isNotEmpty) {
+      print('> Both movies are from: ${movie1.countryList.join(', ')}');
+    }
+
+    // Language
+    movie1.langList
+        .removeWhere((element) => !movie2.langList.contains(element));
+    if (movie1.langList.isNotEmpty) {
+      print('> Language/s in common: ${movie1.langList.join(', ')}');
+    }
+
+    // Runtime
+    if (movie1.runtime == movie2.runtime) {
+      print('> Both movies have the exact same runtime!: ${movie1.runtime}');
+    }
+
+    print('\n');
   } catch (e) {
     print(e);
   }
 }
 
-Future<MyOmdb> queryMovie() async {
+// Asks for user input and returns result from API
+Future<Movie> queryMovie() async {
   String movie = '';
   while (movie.isEmpty) {
     if (movie == 'q') exit(0);
-    stdout.write('Enter movie title [q to exit]: ');
+    stdout.write('\nEnter movie title [q to exit]: ');
     movie = stdin.readLineSync()!;
   }
 
   stdout.write('(Optional) Enter year of release [ENTER to skip]): ');
   int? year = int.tryParse(stdin.readLineSync()!); // TODO validate input
 
-  MyOmdb client = MyOmdb(Keys.OMDB_KEY, movie, year);
+  MyOmdb client = MyOmdb(movie, year);
   await client.getMovie();
+
+  if (client.movie.title == null) throw Exception('Movie not found');
 
   print('\n*****');
   print('Title: ${client.movie.title} (${client.movie.year})');
   print('Plot:${client.movie.plot} ');
-  // print('Director/s:${client.movie.directorsList} ');
-  // print('Writer/s:${client.movie.writersList} ');
-  print('Actor/s:${client.movie.actorsList} ');
   print('*****\n');
 
-  return client;
+  return client.movie;
 }
 
-/// Returns the director/s in the form of a List<String>
+// Parses a comma separated list of names in a String to a List object
+List<String> stringFieldToList(String input) {
+  List<String> txt = input.split(',');
+  for (int i = 0; i < txt.length; i++) {
+    if (txt[i].contains('(')) {
+      txt[i] =
+          txt[i].replaceRange(txt[i].indexOf('('), txt[i].indexOf(')') + 1, '');
+    }
+    txt[i] = txt[i].trim();
+  }
+  return txt;
+}
+
+/*
+ * Extension functions
+ */
+
+/// Returns the director/s in the form of a List
 extension on Movie {
   List<String> get directorsList {
-    List<String> directors = director.split(',');
-    for (int i = 0; i < directors.length; i++) {
-      if (directors[i].contains('(')) {
-        directors[i] = directors[i].replaceRange(
-            directors[i].indexOf('('), directors[i].indexOf(')') + 1, '');
-      }
-      directors[i] = directors[i].trim();
-    }
-    return directors;
+    return stringFieldToList(director);
   }
 }
 
-/// Returns the writer/s in the form of a List<String>
+/// Returns the writer/s in the form of a List
 extension on Movie {
   List<String> get writersList {
-    List<String> writers = writer.split(',');
-    for (int i = 0; i < writers.length; i++) {
-      if (writers[i].contains('(')) {
-        writers[i] = writers[i].replaceRange(
-            writers[i].indexOf('('), writers[i].indexOf(')') + 1, '');
-      }
-      writers[i] = writers[i].trim();
-    }
-    return writers;
+    return stringFieldToList(writer);
   }
 }
 
-/// Returns the actor/s/actress/es in the form of a List<String>
+/// Returns the actor/s/actress/es in the form of a List
 extension on Movie {
   List<String> get actorsList {
-    List<String> act = actors.split(',');
-    for (int i = 0; i < act.length; i++) {
-      if (act[i].contains('(')) {
-        act[i] = act[i]
-            .replaceRange(act[i].indexOf('('), act[i].indexOf(')') + 1, '');
-      }
-      act[i] = act[i].trim();
-    }
-    return act;
+    return stringFieldToList(actors);
+  }
+}
+
+/// Returns the producing companies in the form of a List
+extension on Movie {
+  List<String> get prodList {
+    return stringFieldToList(production);
+  }
+}
+
+/// Returns the country/ies of origin in the form of a List
+extension on Movie {
+  List<String> get countryList {
+    return stringFieldToList(country);
+  }
+}
+
+/// Returns the languages in the form of a List
+extension on Movie {
+  List<String> get langList {
+    return stringFieldToList(language);
   }
 }
