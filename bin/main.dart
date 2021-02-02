@@ -49,6 +49,13 @@ void main() async {
       exit(0);
     }
 
+    // Year
+    if (movie1.year == movie2.year) {
+      print(
+          '> Both were released on ${movie1.year} (${movie1.yearsAgo} years ago)'
+              .green());
+    }
+
     // Director/s
     List<String> directorsMatch = [];
     for (String director in movie1.directorsList) {
@@ -130,14 +137,9 @@ Future<Movie> queryMovie() async {
 
   stdout.write('(Optional) Enter year of release [ENTER to skip]): ');
   int? year = int.tryParse(stdin.readLineSync()!);
-  if (year != null) {
-    if (year < 1870 || year > DateTime.now().year) {
-      print('Not a valid year');
-      year = null;
-    }
-  }
+  int? safeYear = validateYear(year);
 
-  MyOmdb client = MyOmdb(movie, year);
+  MyOmdb client = MyOmdb(movie, safeYear);
   await client.getMovie();
 
   if (client.movie.title == null) throw Exception('Movie not found');
@@ -145,9 +147,20 @@ Future<Movie> queryMovie() async {
   print('\n');
   print('Title: ${client.movie.title} (${client.movie.year})'.blue());
   print('Plot:${client.movie.plot} '.blue());
+  print('Director/s: ${client.movie.director}');
   print('\n');
 
   return client.movie;
+}
+
+int? validateYear(int? year) {
+  if (year != null) {
+    if (year < 1870 || year > DateTime.now().year) {
+      print('Not a valid year');
+      return null;
+    }
+  }
+  return year;
 }
 
 // Parses a comma separated list of names in a String to a List object
@@ -206,5 +219,11 @@ extension on Movie {
 extension on Movie {
   List<String> get langList {
     return stringFieldToList(language);
+  }
+}
+
+extension on Movie {
+  int get yearsAgo {
+    return DateTime.now().year - int.parse(year);
   }
 }

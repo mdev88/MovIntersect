@@ -3,9 +3,9 @@
   "packages": [
     {
       "name": "characters",
-      "rootUri": "file:///home/user/.pub-cache/hosted/pub.dartlang.org/characters-1.1.0-nullsafety.3",
+      "rootUri": "file:///home/user/.pub-cache/hosted/pub.dartlang.org/characters-1.1.0-nullsafety.5",
       "packageUri": "lib/",
-      "languageVersion": "2.10"
+      "languageVersion": "2.12"
     },
     {
       "name": "charcode",
@@ -15,15 +15,15 @@
     },
     {
       "name": "collection",
-      "rootUri": "file:///home/user/.pub-cache/hosted/pub.dartlang.org/collection-1.15.0-nullsafety.3",
+      "rootUri": "file:///home/user/.pub-cache/hosted/pub.dartlang.org/collection-1.15.0-nullsafety.5",
       "packageUri": "lib/",
-      "languageVersion": "2.10"
+      "languageVersion": "2.12"
     },
     {
       "name": "flutter",
       "rootUri": "file:///opt/flutter/packages/flutter",
       "packageUri": "lib/",
-      "languageVersion": "2.10"
+      "languageVersion": "2.12"
     },
     {
       "name": "http",
@@ -39,9 +39,9 @@
     },
     {
       "name": "meta",
-      "rootUri": "file:///home/user/.pub-cache/hosted/pub.dartlang.org/meta-1.3.0-nullsafety.3",
+      "rootUri": "file:///home/user/.pub-cache/hosted/pub.dartlang.org/meta-1.3.0-nullsafety.6",
       "packageUri": "lib/",
-      "languageVersion": "2.10"
+      "languageVersion": "2.12"
     },
     {
       "name": "omdb_dart",
@@ -65,7 +65,7 @@
       "name": "sky_engine",
       "rootUri": "file:///opt/flutter/bin/cache/pkg/sky_engine",
       "packageUri": "lib/",
-      "languageVersion": "1.11"
+      "languageVersion": "2.12"
     },
     {
       "name": "source_span",
@@ -93,15 +93,15 @@
     },
     {
       "name": "typed_data",
-      "rootUri": "file:///home/user/.pub-cache/hosted/pub.dartlang.org/typed_data-1.3.0-nullsafety.3",
+      "rootUri": "file:///home/user/.pub-cache/hosted/pub.dartlang.org/typed_data-1.3.0-nullsafety.5",
       "packageUri": "lib/",
-      "languageVersion": "2.10"
+      "languageVersion": "2.12"
     },
     {
       "name": "vector_math",
-      "rootUri": "file:///home/user/.pub-cache/hosted/pub.dartlang.org/vector_math-2.1.0-nullsafety.3",
+      "rootUri": "file:///home/user/.pub-cache/hosted/pub.dartlang.org/vector_math-2.1.0-nullsafety.5",
       "packageUri": "lib/",
-      "languageVersion": "2.10"
+      "languageVersion": "2.12"
     },
     {
       "name": "test",
@@ -110,7 +110,7 @@
       "languageVersion": "2.10"
     }
   ],
-  "generated": "2020-12-22T14:22:38.289620Z",
+  "generated": "2021-02-02T16:00:39.696179Z",
   "generator": "pub",
-  "generatorVersion": "2.10.4"
+  "generatorVersion": "2.12.0-133.7.beta"
 }
